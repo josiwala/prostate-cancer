@@ -1,0 +1,2 @@
+parent link: http://www.cnachtsheim-text.csom.umn.edu/
+data set c5: http://www.cnachtsheim-text.csom.umn.edu/Kutner/Appendix%20C%20Data%20Sets/APPENC05.txt
