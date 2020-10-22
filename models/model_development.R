@@ -1,5 +1,8 @@
+# set working directory
+setwd("C:/Users/jaosi/Desktop/DS-Projects/graduate-project/prostate-cancer")
+
 # load dataset
-APPENC05 <- read.csv("C:/Users/jaosi/Desktop/DS-Projects/graduate-project/prostate-cancer/data/processed/APPENC05_log.txt")
+APPENC05 <- read.csv("./data/processed/APPENC05.txt")
 mydata <- APPENC05
 summary(mydata)
 View(mydata)
@@ -8,7 +11,7 @@ names(mydata)
 # load packages
 library(caTools)
 library(ROCR)
-library(pscl)
+# library(pscl)
 
 # declare SeminalVesicleInvasion a categorical variable (SeminalVesicleInvasion = [0, 1])
 mydata$SeminalVesicleInvasion <- factor(mydata$SeminalVesicleInvasion)
@@ -17,10 +20,15 @@ mydata$SeminalVesicleInvasion <- factor(mydata$SeminalVesicleInvasion)
 myseed <- 123
 set.seed(myseed)
 split <- sample.split(mydata, SplitRatio=0.8)
-training <- subset(mydata, split=="TRUE")
-testing <- subset(mydata, split=="FALSE")
-#123
-#222
+train <- subset(mydata, split=="TRUE")
+test <- subset(mydata, split=="FALSE")
+
+View(train)
+View(test)
+
+# write train & test datasets to CSV files
+write.csv(train, "./data/processed/train.txt")
+write.csv(test, "./data/processed/test.txt")
 
 
 
@@ -74,6 +82,8 @@ logit_red <- glm(Y_HighGradeCancer ~
               , data=training, family="binomial")
 summary(logit_red)
 # pR2(logit_red)
+
+
 
 #####################################
 ### Model Checking and Validation ###
