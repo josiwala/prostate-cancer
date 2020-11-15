@@ -1,9 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Academic Title Page
+% Academic Title Page:
 % LaTeX Template
 % Version 2.0 (17/7/17)
 %
-% This template was downloaded from:
+% This TITLE PAGE template was downloaded from:
 % http://www.LaTeXTemplates.com
 %
 % Original author:
@@ -12,19 +12,31 @@
 %
 % License:
 % CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
-% 
-% Instructions for using this template:
-% This title page is capable of being compiled as is. This is not useful for 
-% including it in another document. To do this, you have two options: 
 %
-% 1) Copy/paste everything between \begin{document} and \end{document} 
-% starting at \begin{titlepage} and paste this into another LaTeX file where you 
-% want your title page.
-% OR
-% 2) Remove everything outside the \begin{titlepage} and \end{titlepage}, rename
-% this file and move it to the same directory as the LaTeX file you wish to add it to. 
-% Then add \input{./<new filename>.tex} to your LaTeX file where you want your
-% title page.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% General Document Structure:
+%
+% The final research document should contain the following sections, typed in Times New Roman using 12-font size, 
+% not more than 10 page with single line space:
+%
+% TITLE: What is the study about?
+%
+% 
+
+
+%
+% RATIONALE: Why is this study important? What is the purpose of the study? What do you want to achieve? (about ½-1 page).
+%
+% LITERATURE REVIEW: Mention any reference/example of similar/ related work/ article citation. Discuss briefly what has 
+% been done in this problem/area of your interest (about 2-3 pages).
+%
+% DESIGN AND ANALYSIS: Objective of the study, data source, statistical model/tools/methodology, validity of the 
+% assumptions if any, results of the study (graphs, tables will go here), results discussion, (interpretations/
+% conclusions/inferences).
+%
+% CONCLUSION: Limitations of the study, Questions for further research.
+%
+% REFERENCES: A list of the references used in the article.
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -32,13 +44,15 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt]{article}
+\documentclass[12pt, a4paper]{article}
 
+\usepackage[margin=1in]{geometry} % Used to adjust margins, footers, etc.
 \usepackage[utf8]{inputenc} % Required for inputting international characters
-\usepackage[T1]{fontenc} % Output font encoding for international characters
-\usepackage{graphicx}
+\usepackage[T1]{fontenc} % Output font encoding for international characters`
 \usepackage{mathpazo} % Palatino font
-\graphicspath{ {./figures/} }
+\usepackage{indentfirst} % Will indent first paragraph after a section tag
+\usepackage{graphicx}
+\graphicspath{ {./figures/} } % Setting path to fetch images
 
 \begin{document}
 
@@ -48,16 +62,15 @@
 
 \begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
 	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for horizontal lines, change thickness here
-	\center % Centre everything on the page 
+	\center % Center everything on the page 
 	
 	%------------------------------------------------
 	%	Headings
 	%------------------------------------------------
 	\textsc{\LARGE Eastern Michigan University}\\[1.5cm] % Main heading such as the name of your university/college
-	\textsc{\Large Individual Research Study}\\[0.5cm] % Major heading such as course name
+	\textsc{\Large Master's Thesis}\\[0.5cm] % Major heading such as course name
 	\textsc{\large Department of Mathematics and Statistics}\\[0.5cm] % Minor heading such as course title
-	October 22, 2020\\ % Date, change the \today to a set date if you want to be precise
-	
+
 	%------------------------------------------------
 	%	Title
 	%------------------------------------------------
@@ -95,7 +108,7 @@
 	%------------------------------------------------
 	
 	%\vfill % Position the date 3/4 down the remaining page
-	
+	\vspace{2cm} October 23, 2020 % Date, change the \today to a set date if you want to be precise
 	
 	
 	%------------------------------------------------
@@ -107,10 +120,32 @@
 	
 	%----------------------------------------------------------------------------------------
 	
-	\vfill % Push the date up 1/4 of the remaining page
+	%\vfill % Push the date up 1/4 of the remaining page
 	
 \end{titlepage}
 
+
 %----------------------------------------------------------------------------------------
+%	DOCUMENT BODY
+%----------------------------------------------------------------------------------------
+
+%  Proposal
+\input{sections/proposal}
+
+%  Rationale
+\input{sections/rationale}
+
+%  Literature Review
+\input{sections/literature_review}
+
+%  Design and Analysis
+\input{sections/design_and_analysis}
+
+%  Conclusion
+\input{sections/conclusion}
+
+%  References
+\input{sections/references}
+
 
 \end{document}
