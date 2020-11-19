@@ -11,7 +11,8 @@ names(mydata)
 # load packages
 library(caTools)
 library(ROCR)
-#library(pscl)
+library(ResourceSelection)
+
 
 # declare SeminalVesicleInvasion a categorical variable (SeminalVesicleInvasion = [0, 1])
 mydata$SeminalVesicleInvasion <- factor(mydata$SeminalVesicleInvasion)
@@ -88,6 +89,12 @@ summary(logit_red)
 ### Model Checking and Validation ###
 #####################################
 
+### Hosmer-Lemeshow Goodness of Fit Test
+gof <- hoslem.test(logit_red$y, fitted(logit_red), g=5)
+cbind(gof$expected, gof$observed)
+gof
+
+
 ### accuracy model comparisons
 freq <- function(data) {
   # function required input parameter: data.
@@ -106,16 +113,19 @@ freq <- function(data) {
   
   freq_tab <- table(data$Y_HighGradeCancer)
   most_freq_prop <- sum(freq_tab[1])/sum(freq_tab)
+  less_freq_pop <- sum(freq_tab[2])/sum(freq_tab)
   
   # print out both the table, and calculated base accuracy 
   print('Frequency Table:')
   print(freq_tab)
   print('The proportion of 0 to 1 is:')
   print(most_freq_prop)
+  print('The proportion of 1 to 0 is:')
+  print(less_freq_pop)
 }
 
 
-accuracy <- function(model, data, val=0.5) {
+accuracy <- function(model, data, val=0.50) {
   # function required input parameters: model, data, and decision value boundry (optional); defualt 50%.
   # this function will first apply the fitted model and create classifications, then compare to real values (which we know).
   # the confusion matrix and accuracy score will output to the terminal.
@@ -146,7 +156,7 @@ accuracy <- function(model, data, val=0.5) {
 ### Training Data ###
 # invoke functions
 freq(train)
-accuracy(logit_red, train, 0.5)
+accuracy(logit_red, train, 0.184)
 
 ### training vizualizations
 # Residuals vs. Fitted
@@ -160,6 +170,7 @@ pred <- predict(logit_red, train, type="response")
 ROCRPred <- prediction(pred, train$Y_HighGradeCancer)
 ROCRPref <- performance(ROCRPred, "tpr", "fpr")
 plot(ROCRPref, colorize=TRUE, print.cutoffs.at=seq(0.1, by=0.1))
+title('Reciever Operating Characteristic Curve')
 
 
 ####################
