@@ -7,8 +7,32 @@
 %----------------------------------------------------------------------------------------
 %
 
-\section{Conlcusion}
+\section{Conclusion}
+The reliability of the chosen model, prediction rule, and prediction error rate from the training data is examined by now applying the prediction rule to the validation data set (i.e. the remaining 20\% of data). As I will show, the new prediction error rate is ABOUT THE SAME as that for the model-building data set, and gives a reliable indication of the predictive ability of the fitted logistic regression model and the chosen prediction rule. If the new and unseen data had lead to a considerably higher prediction error rate, then the fitted logistic regression model and the chosen prediction rule would not predict new observations well. \par
 
--Talk about "Factors that might affect PSA Levels". \\
--Study doesn't indicate which type of prostate cancer we're investigating. (eh) \\
--Concerns about early detection/testing. (already somewhat touched on already)
+In my Prostate Cancer logistics model, the fitted logistic regression function (FUNCTION XXX) based on the model-building data set:
+
+\begin{equation}
+\hat{\pi}=[ 1+ exp(-2.6867 + 1.0577X_1 + 1.5502X_2)]^{-1}
+\end{equation}
+
+was used to calculate estimated probabilities \(\hat{\pi}_h\) for the validation data set. The chosen prediction rule (Eqn. XXX):
+
+\begin{equation}
+	\textrm{Predict 1 if } \hat{\pi}_h \geq 0.2\textrm{; predict 0 if } \hat{\pi}_h < 0.2
+\end{equation}
+
+was then applied to these estimated probabilities. The percent prediction error rates were as follows:
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ |c|c|c| }
+ 	\multicolumn{2}{c}{Disease Status} \\
+ 	\hline
+ 	With High Grade Cancer&Without High Grade Cancer&Total\\
+ 	14&49&62\\
+ 	\hline
+	\end{tabular}
+ 	\caption{Classification based on Logistic Response Function XXX and Prediction Rules.}
+\end{table}
+

@@ -12,9 +12,9 @@ names(mydata)
 library(caTools)
 library(ROCR)
 library(ResourceSelection)
+library(car)
 
-
-# declare SeminalVesicleInvasion a categorical variable (SeminalVesicleInvasion = [0, 1])
+# declare SeminalVesicleInvasion a categorical variable (SeminalVesicleInvasion == [0, 1])
 mydata$SeminalVesicleInvasion <- factor(mydata$SeminalVesicleInvasion)
 
 # create training and testing subsets
@@ -33,43 +33,109 @@ write.csv(test, "./data/processed/test.txt")
 
 
 
-#####################
-### Model Fitting ###
-#####################
+##################################
+### Building Helpful Functions ###
+##################################
 
-### second-order polynomial logistic models ###
+freq <- function(data) {
+  # function requires one input parameter: data.
+  # this function will display the table of Y_HighGradeCancer counts (frequency table); i.e. the counts of 0's and 1's in the input data.
+  # the function will then display the proportion of 0 to 1 (I already know via previous analysis that the counts of 0's greatly outweigh the count of 1's).
+  # we can consider this proportion to be a "base accuracy" for model comparison; i.e. if the model just predicted 0's (most frequent classification), for all cases.
+  
+  name <- deparse(substitute(data))
+  
+  if (name=='train') {
+    cat('TRAINING DATA\n')
+  }
+  else {
+    cat('TESTING DATA\n')
+  }
+  
+  freq_tab <- table(data$Y_HighGradeCancer)
+  most_freq_prop <- round(sum(freq_tab[1])/sum(freq_tab), 4)
+  less_freq_pop <- round(sum(freq_tab[2])/sum(freq_tab), 4)
+  
+  # print out both the table, and calculated base accuracy 
+  cat('Frequency Table:\n')
+  print(freq_tab)
+  cat('\nThe proportion of 0 to 1 is:', most_freq_prop, '\n')
+  cat('The proportion of 1 to 0 is:', less_freq_pop)
+}
+
+
+accuracy <- function(model, data, val=0.50) {
+  # function requires three input parameters: model, data, and decision value boundry (optional); defualt 50%.
+  # this function will first apply the fitted model and create classifications, then compare to real values (which we know).
+  # the confusion matrix and accuracy score will output to the terminal.
+  # idealy we want the accuracy score to be greater than the base score calculated previously (this indicates the logistic model is a better fit).
+  # decision boundry value may require analysis and adjustments/optimizations afterwards.
+  
+  name <- deparse(substitute(data))
+  
+  if (name=='train') {
+    cat('TRAINING DATA\n')
+  }
+  else {
+    cat('TESTING DATA\n')
+  }
+  
+  res <- predict(model, data, type="response")
+  tab <- table(ActualValue=data$Y_HighGradeCancer, PredictedValue=res>=val)
+  acc <- round(sum(diag(tab))/sum(tab)*100, 2)
+  
+  # print out confusion matrix, and calculated accuracy
+  cat('Prediction Rule:', val, '\n')
+  cat('Confusion Matrix:\n', '\n')
+  print(tab)
+  cat('\nThe calculated accuracy is:', acc, '%')
+}
+
+
+
+##########################
+###                    ###
+###    Model Fitting   ###
+###                    ###
+##########################
+
+###############################################
+### Second-Order Polynomial Logistic Models ###
+###############################################
+
 # fit full second-order logistic model
 logit_poly <- glm(Y_HighGradeCancer ~ poly(PSALevel, 2) + poly(CancerVol, 2) + 
                   poly(Weight, 2) + poly(Age, 2) + poly(BenignProstaticHyperplasia, 2) + 
                   SeminalVesicleInvasion + poly(CapsularPenetration, 2), 
-                  data=training, family="binomial")
+                  data=train, family="binomial")
 summary(logit_poly)
-step(logit_poly)
-#pR2(logitpoly)
+step(logit_poly, direction="backward")
 
 # use second-order reduced model setup for quick analysis of adding/removing predictors
 logit_poly_red <- glm(Y_HighGradeCancer ~ 
                       poly(PSALevel, 2)
-                  #  + poly(CancerVol, 2) +
-                  # + Weight^2 +
-                    + poly(Age, 2)
+                    + poly(CancerVol, 2)
+                  # + poly(Weight, 2) 
+                  # + poly(Age, 2)
                   # + poly(BenignProstaticHyperplasia, 2)
                   # + poly(SeminalVesicleInvasion, 2) 
-                   + poly(CapsularPenetration, 2)
-                  , family="binomial", data=training)
+                  #  + poly(CapsularPenetration, 2)
+                  , data=train, family="binomial")
 summary(logit_poly_red)
 step(logit_poly_red, direction="backward")
 
 
-### first-order logistic models ###
+###################################
+### First-Order Logistic Models ###
+###################################
+
 # fit full first-order logistic model
 logit_full <- glm(Y_HighGradeCancer ~ PSALevel + CancerVol + Weight + 
                   Age + BenignProstaticHyperplasia +
-                  SeminalVesicleInvasion + CapsularPenetration, data=training, 
+                  SeminalVesicleInvasion + CapsularPenetration, data=train, 
                   family="binomial")
 summary(logit_full)
 step(logit_full, direction="backward")
-#pR2(logit_full)
 
 # use reduced model setup for quick analysis of adding/removing predictors
 logit_red <- glm(Y_HighGradeCancer ~ 
@@ -80,113 +146,113 @@ logit_red <- glm(Y_HighGradeCancer ~
               # + BenignProstaticHyperplasia
               # + SeminalVesicleInvasion
               # + CapsularPenetration
-              , data=training, family="binomial")
+              , data=train, family="binomial")
 summary(logit_red)
-#pR2(logit_red)
 
 
-#####################################
-### Model Checking and Validation ###
-#####################################
 
-### Hosmer-Lemeshow Goodness of Fit Test
-gof <- hoslem.test(logit_red$y, fitted(logit_red), g=5)
+##########################################
+###                                    ###
+###    Model Checking and Validation   ###
+###                                    ###
+##########################################
+
+################################################################
+### Cook's Distance Diagnostics for Influential Observations ###
+################################################################
+plot(logit_red, pch=18, col="red", which=c(4))
+myCDs <- sort(round(cooks.distance(logit_red), 5), decreasing=TRUE)
+myCDs
+
+# drop rows for model building (influential observations)
+# this step will be visited within Coook's Distance analysis
+train_trim <- subset(train, Obs != 90
+                    #  & Obs != 37
+                    #  & Obs != 91
+                      )
+
+# view the trimmed data
+View(train_trim)
+
+# write train_trim dataset to csv file
+write.csv(train_final, "./data/processed/train_trim.txt")
+
+# re-fit the logistic model
+logit_red_trim <- glm(Y_HighGradeCancer ~ 
+                   PSALevel
+                 + CancerVol
+                 # + Weight 
+                 # + Age
+                 # + BenignProstaticHyperplasia
+                 # + SeminalVesicleInvasion
+                 # + CapsularPenetration
+                 , data=train_trim, family="binomial")
+summary(logit_red_trim)
+
+# RESULT: the removal of these rows did not improve the model.
+# continue forward with original logit_red model
+
+############################################
+### Hosmer-Lemeshow Goodness of Fit Test ###
+############################################
+
+gof <- hoslem.test(logit_red$y, fitted(logit_red), g=5) # choosing 5 groups
 cbind(gof$expected, gof$observed)
 gof
 
+######################
+### vizualizations ###
+######################
 
-### accuracy model comparisons
-freq <- function(data) {
-  # function required input parameter: data.
-  # this function will display the table of Y_HighGradeCancer counts (frequency table); i.e. the counts of 0's and 1's in the input data.
-  # the function will then display the proportion of 0 to 1 (I already know via previous analysis that the counts of 0's greatly outweigh the count of 1's).
-  # we can consider this proportion to be a "base accuracy" for model comparison; i.e. if the model just predicted 0's (most frequent classification), for all cases.
-  
-  name <- deparse(substitute(data))
-  
-  if (name=='train') {
-    print('TRAINING DATA')
-  }
-  else {
-    print('TESTING DATA')
-  }
-  
-  freq_tab <- table(data$Y_HighGradeCancer)
-  most_freq_prop <- sum(freq_tab[1])/sum(freq_tab)
-  less_freq_pop <- sum(freq_tab[2])/sum(freq_tab)
-  
-  # print out both the table, and calculated base accuracy 
-  print('Frequency Table:')
-  print(freq_tab)
-  print('The proportion of 0 to 1 is:')
-  print(most_freq_prop)
-  print('The proportion of 1 to 0 is:')
-  print(less_freq_pop)
-}
-
-
-accuracy <- function(model, data, val=0.50) {
-  # function required input parameters: model, data, and decision value boundry (optional); defualt 50%.
-  # this function will first apply the fitted model and create classifications, then compare to real values (which we know).
-  # the confusion matrix and accuracy score will output to the terminal.
-  # idealy we want the accuracy score to be greater than the base score calculated previously (this indicates the logistic model is a better fit).
-  # decision boundry value may require analysis and adjustments/optimizations afterwards.
-  
-  name <- deparse(substitute(data))
-  
-  if (name=='train') {
-    print('TRAINING DATA')
-  }
-  else {
-    print('TESTING DATA')
-  }
-  
-  res <- predict(model, data, type="response")
-  tab <- table(ActualValue=data$Y_HighGradeCancer, PredictedValue=res>=val)
-  acc <- sum(diag(tab))/sum(tab)
-  
-  # print out confusion matrix, and calculated accuracy
-  print('Confusion Matrix:')
-  print(tab)
-  print('The calculated accuracy is:')
-  print(acc)
-}
-
-
-### Training Data ###
-# invoke functions
-freq(train)
-accuracy(logit_red, train, 0.184)
-
-### training vizualizations
 # Residuals vs. Fitted
 # Normal Q-Q
 # scale-location (Predicted Values vs. sqrt[Std. Pearson Residuals])
 # Residuals vs. Leverage
 plot(logit_red)
+residualPlot(logit_red, type="pearson")
 
-# build and plot ROC curve
+### build and plot ROC curve ###
 pred <- predict(logit_red, train, type="response")
 ROCRPred <- prediction(pred, train$Y_HighGradeCancer)
 ROCRPref <- performance(ROCRPred, "tpr", "fpr")
-plot(ROCRPref, colorize=TRUE, print.cutoffs.at=seq(0.1, by=0.1))
-title('Reciever Operating Characteristic Curve')
+plot(ROCRPref, colorize=TRUE, print.cutoffs.at=seq(0.1, by=0.1), main="Reciever Operating Characteristic Curve")
 
 
-####################
-### Testing Data ###
-####################
+##################################
+### Accuracy Model Comparisons ###
+##################################
 
-# invoke functions
+### invoke functions ###
+freq(train)
+accuracy(logit_red, train, 0.184) # starting point prediction rule
+accuracy(logit_red, train, 0.2)
+
+
+########################
+###                  ###
+###    Final Model   ###
+###                  ###
+########################
+
+# no changes have been made from the reduced model
+logit_final <- logit_red
+summary(logit_final)
+
+
+
+#########################################
+###                                   ###
+###    Model Validation: Test Data    ###
+###                                   ###
+#########################################
+
+##################################
+### Accuracy Model Comparisons ###
+##################################
+
+### invoke functions ###
 freq(test)
-accuracy(logit_red, test, 0.2)
-
-
-
-
-
-
-
+accuracy(logit_final, test, 0.3)
 
 
 

@@ -1,0 +1,25 @@
+\BOOKMARK [1][-]{section.1}{Proposal}{}% 1
+\BOOKMARK [1][-]{section.2}{Rationale}{}% 2
+\BOOKMARK [1][-]{section.3}{Literature Review}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Predictor Variables}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Related Research}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Design and Analysis}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Data Transformations and Standardization}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Second-Order Predictors}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.3}{Model Selection}{section.4}% 9
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Best Subsets Procedure}{subsection.4.3}% 10
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Model Fitting}{subsection.4.3}% 11
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Geometric Interpretation}{subsection.4.3}% 12
+\BOOKMARK [2][-]{subsection.4.4}{Analysis of Residuals}{section.4}% 13
+\BOOKMARK [3][-]{subsubsection.4.4.1}{Logistic Regression Residuals}{subsection.4.4}% 14
+\BOOKMARK [3][-]{subsubsection.4.4.2}{Influential Observations}{subsection.4.4}% 15
+\BOOKMARK [2][-]{subsection.4.5}{Goodness Of Fit Evaluation}{section.4}% 16
+\BOOKMARK [3][-]{subsubsection.4.5.1}{Hosmer-Lemeshow}{subsection.4.5}% 17
+\BOOKMARK [2][-]{subsection.4.6}{Development of ROC Curve}{section.4}% 18
+\BOOKMARK [3][-]{subsubsection.4.6.1}{Prediction Rule}{subsection.4.6}% 19
+\BOOKMARK [2][-]{subsection.4.7}{Model: Strengths and Weaknesses}{section.4}% 20
+\BOOKMARK [3][-]{subsubsection.4.7.1}{Strengths}{subsection.4.7}% 21
+\BOOKMARK [3][-]{subsubsection.4.7.2}{Weaknesses}{subsection.4.7}% 22
+\BOOKMARK [1][-]{section.5}{Conclusion}{}% 23
+\BOOKMARK [1][-]{section.6}{References}{}% 24
+\BOOKMARK [1][-]{section.7}{Extract Prostate Cancer Data From Textbook URL}{}% 25

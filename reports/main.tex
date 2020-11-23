@@ -42,15 +42,17 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[12pt, a4paper]{article}
+\documentclass[11pt, a4paper]{article}
 
 \usepackage[margin=1in]{geometry} % Used to adjust margins, footers, etc.
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters`
 \usepackage{mathpazo} % Palatino font
 \usepackage{indentfirst} % Will indent first paragraph after a section tag
-\usepackage{amsmath} % mathematics package
-\usepackage[font=small,labelfont=bf]{caption} % modify caption font
+\usepackage{amsmath} % Mathematics package
+\usepackage[font=small,labelfont=bf]{caption} % Modify caption font
+\usepackage[font=small,labelfont=bf]{subcaption} % Modify subcaption font
+\usepackage{pdfpages} % Include exterior pdfs
 \usepackage{float}
 \restylefloat{table}
 \usepackage{graphicx}
@@ -70,7 +72,7 @@
 	%	Headings
 	%------------------------------------------------
 	\textsc{\LARGE Eastern Michigan University}\\[1.5cm] % Main heading such as the name of your university/college
-	\textsc{\Large Master's Thesis}\\[0.5cm] % Major heading such as course name
+	\textsc{\Large Master's Research}\\[0.5cm] % Major heading such as course name
 	\textsc{\large Department of Mathematics and Statistics}\\[0.5cm] % Minor heading such as course title
 
 	%------------------------------------------------
@@ -147,7 +149,13 @@
 \input{sections/conclusion}
 
 %  References
+\pagebreak
 \input{sections/references}
+
+%  Appendix
+\pagebreak
+\input{sections/appendix}
+
 
 
 \end{document}
