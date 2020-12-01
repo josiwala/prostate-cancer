@@ -1,3 +1,8 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+<<>>=
 # set working directory
 setwd("C:/Users/jaosi/Desktop/DS-Projects/graduate-project/prostate-cancer")
 
@@ -263,3 +268,6 @@ summary(logit_final)
 ### invoke functions ###
 freq(test)
 accuracy(logit_final, test, 0.20)
+@
+
+\end{document}
