@@ -135,7 +135,6 @@
 \hlkwd{write.csv}\hlstd{(test,} \hlstr{"./data/processed/test.txt"}\hlstd{)}
 
 
-
 \hlcom{##################################}
 \hlcom{### Building Helpful Functions ###}
 \hlcom{##################################}
@@ -192,8 +191,8 @@
 
   \hlstd{res} \hlkwb{<-} \hlkwd{predict}\hlstd{(model, data,} \hlkwc{type}\hlstd{=}\hlstr{"response"}\hlstd{)}
   \hlstd{tab} \hlkwb{<-} \hlkwd{table}\hlstd{(}\hlkwc{ActualValue}\hlstd{=data}\hlopt{$}\hlstd{Y_HighGradeCancer,} \hlkwc{PredictedValue}\hlstd{=res}\hlopt{>=}\hlstd{val)}
-  \hlstd{err} \hlkwb{<-} \hlkwd{round}\hlstd{((}\hlnum{1}\hlopt{-}\hlstd{(}\hlkwd{sum}\hlstd{(}\hlkwd{diag}\hlstd{(tab))}\hlopt{/}\hlkwd{sum}\hlstd{(tab)))}\hlopt{*}\hlnum{100}\hlstd{,} \hlnum{2}\hlstd{)}
-  \hlstd{acc} \hlkwb{<-} \hlkwd{round}\hlstd{(}\hlkwd{sum}\hlstd{(}\hlkwd{diag}\hlstd{(tab))}\hlopt{/}\hlkwd{sum}\hlstd{(tab)}\hlopt{*}\hlnum{100}\hlstd{,} \hlnum{2}\hlstd{)}
+  \hlstd{err} \hlkwb{<-} \hlkwd{round}\hlstd{((}\hlnum{1}\hlopt{-}\hlstd{(}\hlkwd{sum}\hlstd{(}\hlkwd{diag}\hlstd{(tab))}\hlopt{/}\hlkwd{sum}\hlstd{(tab)))}\hlopt{*}\hlnum{100}\hlstd{,} \hlnum{1}\hlstd{)}
+  \hlstd{acc} \hlkwb{<-} \hlkwd{round}\hlstd{(}\hlkwd{sum}\hlstd{(}\hlkwd{diag}\hlstd{(tab))}\hlopt{/}\hlkwd{sum}\hlstd{(tab)}\hlopt{*}\hlnum{100}\hlstd{,} \hlnum{1}\hlstd{)}
 
   \hlcom{# print out confusion matrix, and calculated accuracy}
   \hlkwd{cat}\hlstd{(}\hlstr{'Prediction Rule:'}\hlstd{, val,} \hlstr{'\textbackslash{}n'}\hlstd{)}
@@ -751,8 +750,8 @@
 ##           0    49   13
 ##           1     1   13
 ## 
-## The calculated error is: 18.42 %
-## The calculated accuracy is: 81.58 %
+## The calculated error is: 18.4 %
+## The calculated accuracy is: 81.6 %
 \end{verbatim}
 \begin{alltt}
 \hlkwd{accuracy}\hlstd{(logit_red, train,} \hlnum{0.20}\hlstd{)} \hlcom{# final prediction rule}
@@ -767,8 +766,8 @@
 ##           0    52   10
 ##           1     2   12
 ## 
-## The calculated error is: 15.79 %
-## The calculated accuracy is: 84.21 %
+## The calculated error is: 15.8 %
+## The calculated accuracy is: 84.2 %
 \end{verbatim}
 \begin{alltt}
 \hlcom{########################}
@@ -844,8 +843,8 @@
 ##           0    13    1
 ##           1     2    5
 ## 
-## The calculated error is: 14.29 %
-## The calculated accuracy is: 85.71 %
+## The calculated error is: 14.3 %
+## The calculated accuracy is: 85.7 %
 \end{verbatim}
 \end{kframe}
 \end{knitrout}

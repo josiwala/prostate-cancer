@@ -71,7 +71,6 @@ Additionally, I've included the histogram of PSA Level vs. Cancer Volume in Figu
 
 \subsection{Model Selection}
 The data of 97 individual men in the Prostate Cancer sample was split at 80\% for train (model-building) and test (validation) sets. The training set is a random 76 observations and was used for fitting the model, and the remaining 21 cases were saved to serve as a validation data set. Figure 3 in columns 1-8 contains the variables, and shows a portion of the finalized and processed training data. \par
-The primary purpose of the study was to asses the strength of the association between each of the predictor variables with the response variable, the predictable nature of PSA Level, and the probability of a man having been diagnosed with high grade prostate cancer over low grade.
 
 \begin{figure}[H]
 	\centering
@@ -79,6 +78,7 @@ The primary purpose of the study was to asses the strength of the association be
 	\caption{Portion of Processed Model-Building Data Set - \textit{Python} Dataframe.}
 \end{figure}
 
+\pagebreak
 \subsubsection{Best Subsets Procedure}
 The procedure outlined here will help identify a group of subset models that give the best values of a specified criterion. This technique has been developed by time-saving algorithms which can find the most promising models, without having to evaluate all \(2^{p-1}\) candidates. The use of the best subset procedure is based on the \textit{AIC\textsubscript{p}} criteria, where promising models will yield a relatively small value. \par
 The minimized \textit{AIC\textsubscript{p}} stepwise output given by \textbf{R} is provided in Figure 4 below.
@@ -104,7 +104,7 @@ where:
 \textbf{X}'\boldsymbol{\beta} = \beta_0+\beta_1X_1+\beta_2X_2
 \end{equation}
 
-This model was then fit by the method of maximum likelihood to the data from the 76 random training cases. The results are summarized in Figure 5 \textit{Python} output below. Provided in the output are the estimated coefficients, their standard errors, \textit{z}-scores, \textit{p}-values, and the accompanying 95\% confidence intervals. \par
+This model was then fit by the method of maximum likelihood to the data from the 76 random training cases. Results are summarized in the Figure 5 \textit{Python} output below. Provided in the output are the estimated coefficients, their standard errors, \textit{z}-scores, \textit{p}-values, and the accompanying 95\% confidence intervals. \par
 
 \begin{figure}[H]
 	\centering
@@ -118,11 +118,11 @@ Thus, the estimated logistic response function is:
 \hat{\pi}=[ 1+ exp(-2.6867 + 1.0577X_1 + 1.5502X_2)]^{-1}
 \end{equation}
 
-\textbf{Note}: Although the PSALevel predictor is not of 5\% significance (\textit{p}-value=0.0879), I did find it necessary to maintain within this model. When removed, the Residual Deviance score of 44.628 from Figure 4 rose to a value of 48.123. Therefore, I've deemed it a valuable and impactful variable to achieve high model accuracy, and have not removed it from this subset of predictors. \par
+\textbf{Note}: Although the PSALevel predictor is not of 5\% significance (\textit{p}-value=0.0879), I did find it necessary to maintain it within the model. When removed, the Residual Deviance score of 44.628 from Figure 4 rose to a value of 48.123. Therefore, I've deemed it significant, and a valuable and impactful variable to achieve high model accuracy, and have not removed it from this subset of predictors. \par
 With the estimated logistic regression equation now developed, it is left to consider second-order options and make adjustments if required, analyze the residuals and influential observations, test goodness of fit, apply a prediction rule for new observations, and finally apply the final model to the validation data and evaluate the results.
 
 \subsubsection{Geometric Interpretation}
-When fitting a standard multiple logistic regression model with two predictors, the estimated regression shape is an S-shaped surface in three-dimensional space. Figure 6 displays a three-dimensional plot of a logistic response function that depicts the relationship between the diagnosis of high grade prostate cancer (\textit{Y}, the binary outcome) and two continuous predictors, PSA Level (\textit{X}\textsubscript{1}) and Cancer Volume (\textit{X}\textsubscript{2}). \par
+When fitting a standard multiple logistic regression model with two predictors, the estimated regression shape is an S-shaped surface in three-dimensional space. Figure 6 displays a three-dimensional plot of the estimated logistic response function that depicts the relationship between the diagnosis of high grade prostate cancer (\textit{Y}, the binary outcome) and two continuous predictors, PSA Level (\textit{X}\textsubscript{1}) and Cancer Volume (\textit{X}\textsubscript{2}). \par
 This surface increases in an approximately linear fashion with increasing values of PSA Level and Cancer Volume, but levels off and is nearly horizontal for very small and large values of these predictors.
 
 \begin{figure}[H]
@@ -140,7 +140,7 @@ logit(\pi) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_{11}x_1^2 + \beta_{22}x_2
 \end{equation}
 
 \noindent and can be extended to more predictors by the inclusion of additional variables, their coefficients, and accompanying cross terms. Please recall, the Prostate Cancer data set considers 7 predictors. \par
-In many situations the true regression function has one or more peaks or valleys, and in such cases a polynomial function can provide a satisfactory approximation. However, a polynomial fit was not successful here, as indicated by \textit{non-significant} p-values across all predictors, at 5\% significance (Figure 7). 
+In many situations the true regression function has one or more peaks or valleys, and in such cases a polynomial function can provide a satisfactory approximation. However, a polynomial fit was not successful here, as indicated by non-significant \textit{p}-values across all predictors, at 5\% significance (Figure 7). 
 
 \begin{figure}[H]
 	\centering
@@ -148,12 +148,12 @@ In many situations the true regression function has one or more peaks or valleys
 	\caption{Logistic Regression Fit for Second-Order Model - \textbf{R} Output.}
 \end{figure}
 
-Additionally, my preliminary scatter plot analysis did not indicate any reason to believe a polynomial fit would be suitable in this study. For example, PSALevel was a major focus of this study and I've provided the scatter plot below in Figure 8 (full data set plotted). Additional scatter plots are provided in the Appendix, \S7.1.
+Additionally, my preliminary scatter plot analysis did not indicate any reason to believe a polynomial fit would be suitable in this study. For example, PSALevel was a major focus of this study and I've provided the scatter plot below in Figure 8. Additional scatter plots are provided in the Appendix, \S7.1.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics{psalevel_scatterplot}
-	\caption{PSALevel vs Y\_HighGradeCancer Scatterplot.}
+	\caption{PSALevel vs Y\_HighGradeCancer Scatterplot - Train Data.}
 \end{figure}
 
 Without evidence to be concerned of successfully fitting a model with second-order predictors, I will move forward with my analysis of the previously developed multiple logistic linear regression model.
@@ -162,6 +162,7 @@ Without evidence to be concerned of successfully fitting a model with second-ord
 \subsection{Analysis of Residuals}
 In this section I will discuss the analysis of residuals and the identification of any influential observations for logistic regression. Due to the nature of logistic regression, and the fact that non-constant variance is always present in this setting, I will focus only on the detection of model inadequacy.
 
+\pagebreak
 \subsubsection{Logistic Regression Residuals}
 If the logistic regression model is correct, then \(E[Y_i]=\pi_i\) and it follows that:
 
@@ -248,7 +249,7 @@ Thus, if \(\hat{\pi}_h\) represents a newly fitted observation, my first predict
 	\textrm{Predict 1 if } \hat{\pi}_h \geq 0.184\textrm{; predict 0 if } \hat{\pi}_h < 0.184
 \end{equation}
 
-The Confusion Matrix of Table 1 below provides a summary of the number of correct and incorrect classifications based on the initial prediction rule (Eqn. 13). Of the 62 men without high grade cancer, 13 would be incorrectly predicted to have high grade cancer, or an error rate of 21.0\%. Furthermore, of the 14 persons with high grade cancer, 1 would be incorrectly predicted with the rule (Eqn. 13) to not have high grade cancer, or 7.1\%. Altogether, \(13+1=14\) of the 76 predictions would be incorrect, so that the prediction error rate for the rule (Eqn. 13) is \(14/76=0.184\) or 18.4\%. Coincidentally, the model exactly matches our training set proportions with the current prediction rule. \par
+The Confusion Matrix of Table 1 below provides a summary of the number of correct and incorrect classifications based on the initial prediction rule (Eqn. 13). Of the 62 men without high grade cancer, 13 would be incorrectly predicted to have high grade cancer, or an error rate of 21.0\%. Furthermore, of the 14 persons with high grade cancer, 1 would be incorrectly predicted to not have high grade cancer, or 7.1\%. Altogether, \(13+1=14\) of the 76 predictions would be incorrect, so that the prediction error rate for the rule is \(14/76=0.184\) or 18.4\%. Coincidentally, the model exactly matches our training set proportions with the current prediction rule. \par
 
 \begin{table}[H]
 	\centering
@@ -267,8 +268,9 @@ The Confusion Matrix of Table 1 below provides a summary of the number of correc
  	\caption{Classification based on Logistic Response Function Eqn. 7 and Prediction Rule Eqn. 13.}
 \end{table}
 
+\pagebreak
 With this baseline understood, it is straightforward to choose a stronger cutoff point in utilizing the ROC curve of Figure 12. As detailed above, the false-positive rate is not ideal at 21.0\% - there are too many cases where a man may opt for additional screening and treatment, even invasive actions, because he believes he has high grade prostate cancer. It will be wise to now reference the ROC curve to better choose a prediction cutoff, while also not significantly disturbing the false-negative accuracy for the worse. \par
-Looking at Figure 12 I see a step occurring at 0.20 and use this value for my new cutoff candidate. Thus, my updated prediction rule is stated as follows:
+Looking at Figure 12, a step occurs at 0.20 and I use this value for my new cutoff candidate. Thus, my updated prediction rule is stated as follows:
 
 \begin{equation}
 	\textrm{Predict 1 if } \hat{\pi}_h \geq 0.20\textrm{; predict 0 if } \hat{\pi}_h < 0.20
@@ -293,20 +295,20 @@ and the effects of this change can be summarized by the Confusion Matrix in Tabl
  	\caption{Classification based on Logistic Response Function Eqn. 7 and Prediction Rule Eqn. 14.}
 \end{table}
 
-The model accuracy has now increased with a significantly better false-positive rate, and intended to reduce financial stress across the healthcare economy.
+Here, of the 62 men without high grade cancer, 10 are incorrectly predicted, or an error rate of 16.1\%. Continuing, of the 14 men with high grade cancer, 2 would be incorrectly predicted, or an error rate of 14.3\%. Altogether, updated prediction rule (Eqn. 14) now provides a total error rate of \(12/76=0.158\) or 15.8\%. Thus, the model accuracy has now increased with a significantly better false-positive rate, which is intended to reduce unnecessary financial stress across the healthcare economy.
 
 
 \subsection{Model: Strengths and Weaknesses}
 \subsubsection{Strengths}
--The two predictors which build the final logistic model are PSA Level and Cancer Volume, and they both are adequately correlated with the dependent (outcome) variable Y\_HighGradeCancer - their correlation values are 0.497 and 0.565, respectively. In fact, they are more correlated to the dependent variable than any other predictors of the data set. A consumable heat-map version of a correlation matrix is provided by Figure 13 below, with a color legend given in the upper-left corner.
+-The two predictors which build the final logistic model are PSA Level and Cancer Volume, and they both are adequately correlated with the dependent (outcome) variable Y\_HighGradeCancer - their correlation values are 0.489 and 0.493, respectively. In fact, they are more correlated to the dependent variable than any other predictors of the data set. A consumable heat-map version of a correlation matrix is provided by Figure 13 below, with a color legend given in the upper-left corner.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.7]{corr_map}
-	\caption{Correlation Heatmap - Full Data}
+	\caption{Correlation Heatmap - Train Data}
 \end{figure}
 
--The final model has an excellent accuracy score of 84.21\%. Deploying this model in use could help non high grade cancer men be categorized as such, and thus not pursue unnecessary invasive testing and not inflate costs within the healthcare system. Also, by properly identifying those men who are high grade cancer patients, treatment and a plan can be devised sooner, as well as doing so by only use of PSA Level and Cancer Volume information, and not invasive testing. \\ 
+-The final model has an excellent accuracy score of 84.2\% against training data. If this model also performs well in the validation step, then deploying such a model in use could possibly help non high grade cancer men be categorized as such, and thus not pursue unnecessary invasive testing and not inflate costs within the healthcare system. Also, by properly identifying those men who are high grade cancer patients, treatment and a plan can be devised sooner, as well as doing so by only use of PSA Level and Cancer Volume information, and not invasive testing. \\ 
 
 \subsubsection{Weaknesses}
 -An initial concern while building this model occurs at the level of the provided raw data, namely the existence of multicollinearity. Figure 14 below is the Correlation Matrix of the two final predictors which built the final logistic model: PSA Level and Cancer Volume.
@@ -314,14 +316,15 @@ The model accuracy has now increased with a significantly better false-positive 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=1.0]{corr_matrix}
-	\caption{PSALevel vs. CancerVol Correlation Matrix - Full Data}
+	\caption{PSALevel vs. CancerVol Correlation Matrix - Train Data}
 \end{figure}
 
-As shown, PSA Level and Cancer Volume have a mild correlation value of 0.624 in the full data set. One primary danger in designing models with multicollinearity is that small changes to the input data can lead to large changes in the model, which can further lead to over-fitting. Therefore, this logistic model may be considered mildly "noisy", sensitive, and not particularly robust. \\
+\pagebreak
+As shown, PSA Level and Cancer Volume have a mild correlation value of 0.738 in the full data set. One primary danger in designing models with multicollinearity is that small changes to the input data can lead to large changes in the model, which can further lead to over-fitting. Therefore, this logistic model may be considered mildly "noisy", sensitive, and not particularly robust. \\
 
 -The Goodness of Fit Evaluation of \S4.4 deserves some concern regarding the Pearson chi-square test. As described previously, the Hosmer-Lemeshow procedure was utilized to determine a goodness of fit, and the test statistic is known to be well approximated by the chi-square distribution with \(c-2\) degrees of freedom (Eqn. 11). However, in view of the \textbf{R} output (Figure 11) with 5 groupings, the expected values (\textit{y\textsubscript{1}}) returned were: 0, 0, 1, 4, 9. Because many values are less than 5, and two of the expected values equal 0, the conditions for a chi-square test may be voided, and it may not be an appropriate test procedure here. At the very lest, the results of the Hosmer-Lemeshow test should be accepted carefully. \\
 
--The final model may produce high false-negative rates. In view of Figure 15-A we see that the first prediction cutoff of 0.184 produced 1 count of false-negatives (\(7.1\%\) error rate), and an overall model accuracy of \(81.58\%\). After ROC analysis the final prediction cutoff I've employed is 0.20. By Figure 15-B this rule produces 2 counts of false-negatives (\(14.3\%\) error rate), and an overall model accuracy of 84.21\%. Thus the overall model accuracy has improved 2.63 percentage points by correctly predicting more non high grade cancer cases, but has concurrently doubled the false-negative rate. Because correctly identifying high grade cancer patients may be considered most important, this arrangement may be a downfall of the final model.
+-The final model may produce high false-negative rates. In view of Figure 15-A we see that the first prediction cutoff of 0.184 produced 1 count of false-negatives (\(7.1\%\) error rate), and an overall model accuracy of \(81.6\%\). After ROC analysis the final prediction cutoff I've employed is 0.20. By Figure 15-B this rule produces 2 counts of false-negatives (\(14.3\%\) error rate), and an overall model accuracy of 84.2\%. Thus the overall model accuracy has improved 2.6 percentage points by correctly predicting more non high grade cancer cases, but has concurrently doubled the false-negative rate. Because correctly identifying high grade cancer patients may be considered most important, this arrangement may be a downfall of the final model.
 
 \begin{figure}[H]
 \centering

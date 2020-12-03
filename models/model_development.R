@@ -32,7 +32,6 @@ write.csv(train, "./data/processed/train.txt")
 write.csv(test, "./data/processed/test.txt")
 
 
-
 ##################################
 ### Building Helpful Functions ###
 ##################################
@@ -89,8 +88,8 @@ accuracy <- function(model, data, val=0.50) {
   
   res <- predict(model, data, type="response")
   tab <- table(ActualValue=data$Y_HighGradeCancer, PredictedValue=res>=val)
-  err <- round((1-(sum(diag(tab))/sum(tab)))*100, 2)
-  acc <- round(sum(diag(tab))/sum(tab)*100, 2)
+  err <- round((1-(sum(diag(tab))/sum(tab)))*100, 1)
+  acc <- round(sum(diag(tab))/sum(tab)*100, 1)
   
   # print out confusion matrix, and calculated accuracy
   cat('Prediction Rule:', val, '\n')
@@ -236,6 +235,7 @@ plot(ROCRPref, colorize=TRUE, print.cutoffs.at=seq(0.1, by=0.1),
 freq(train)
 accuracy(logit_red, train, 0.184) # starting point prediction rule
 accuracy(logit_red, train, 0.20) # final prediction rule
+
 
 
 ########################
